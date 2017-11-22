@@ -7,11 +7,37 @@ function stirlingNumberFirstKind() {
 	alert("Error, n or k is not a number!");
 	return;
     }
-    alert(n);
-    alert(k);
+
+    let cnk = stirlingNumberFirstKindHelper(n,k);
+    let snk = Math.pow(-1,(n-k))*cnk;
+    let answerText = "s("+n+","+k+") = " + snk.toString() + " and c("+n+","+k+") = " + cnk.toString();
+    document.getElementById('firstKindOutput').innerHTML = answerText;
 
 }
 
+var firstKindDP = [];
+function stirlingNumberFirstKindHelper(n, k) {
+    let cached = firstKindDP[n.toString()+","+k.toString()];
+    if ( cached !=undefined ) {
+	return cached;
+    }
+
+    if ( n === k ) {
+	return 1;
+    }
+
+    if ( n < k ) {
+	return 0;
+    }
+
+    if ( k === 0 && n !== 0 ) {
+	return 0;
+    }
+
+    let answer = stirlingNumberFirstKindHelper(n-1,k-1)  + (n-1) * stirlingNumberFirstKindHelper(n-1,k); 
+    firstKindDP[n.toString()+","+k.toString()] = answer;
+    return answer;
+}
 
 
 function stirlingNumberSecondKind() {
@@ -28,9 +54,9 @@ function stirlingNumberSecondKind() {
     document.getElementById('secondKindOutput').innerHTML = answerText;
 }
 
-var firstKindDP = [];
+var secondKindDP = [];
 function stirlingNumberSecondKindHelper(n, k) {
-    let cached = firstKindDP[n.toString()+","+k.toString()];
+    let cached = secondKindDP[n.toString()+","+k.toString()];
     if ( cached !=undefined ) {
 	return cached;
     }
@@ -56,6 +82,6 @@ function stirlingNumberSecondKindHelper(n, k) {
     }
 
     let answer = stirlingNumberSecondKindHelper(n-1,k-1)  + k * stirlingNumberSecondKindHelper(n-1,k); 
-    firstKindDP[n.toString()+","+k.toString()] = answer;
+    secondKindDP[n.toString()+","+k.toString()] = answer;
     return answer;
 }
